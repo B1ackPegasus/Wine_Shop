@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><ArrayOfNonPremium xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><NonPremium><Id>1</Id><Email>newuser@mail.com</Email><Phone>234654789</Phone></NonPremium><NonPremium><Id>2</Id><Email>jane@mail.com</Email><Phone>456234987</Phone></NonPremium></ArrayOfNonPremium>

@@ -36,9 +36,9 @@ public class Cocktail
             _name = value;
         }
     }
-
-    private List<string> _listOfIngredients;
-
+    
+    private List<string> _listOfIngredients = [];
+    
     public List<string> ListOfIngredients
     {
         get => new List<string>(_listOfIngredients);
@@ -78,12 +78,12 @@ public class Cocktail
         {
             throw new ArgumentException("Cannot be null!");
         }
-        ListOfIngredients.Add(ingredient);
+        _listOfIngredients.Add(ingredient);
     }
     
     public void RemoveIngredient(int id)
     {
-        ListOfIngredients.RemoveAt(id);
+        _listOfIngredients.RemoveAt(id);
     }
 
     private static void AddToExtent(Cocktail cocktail)

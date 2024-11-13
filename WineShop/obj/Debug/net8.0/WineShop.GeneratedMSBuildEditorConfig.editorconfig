@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WineShop
-build_property.ProjectDir = /Users/shurikandrew/Downloads/WineShop 2/
+build_property.ProjectDir = /Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

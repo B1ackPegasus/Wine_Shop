@@ -74,4 +74,9 @@ public class Address
         ApartmentNumber = apartmentNumber;
         ZipCode = zipCode;
     }
+
+    public Address()
+    {
+    }
+
 }

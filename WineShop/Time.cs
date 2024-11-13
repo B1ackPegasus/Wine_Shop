@@ -58,6 +58,10 @@ public class Time
         seconds = s;
         
     }
+    
+    public Time()
+    {
+    }
 
     
     public override string ToString()

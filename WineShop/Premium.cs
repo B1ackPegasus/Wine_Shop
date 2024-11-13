@@ -6,9 +6,9 @@ namespace WineShop;
 [Serializable]
 public class Premium: Client
 {
-    private DateOnly _startDate;
+    private MyDate _startDate;
 
-    public DateOnly StartDate
+    public MyDate StartDate
     {
         get => _startDate;
         set
@@ -16,15 +16,16 @@ public class Premium: Client
             _startDate = value;
         }
     }
+    
+    private MyDate _endDate;
 
-    private DateOnly _endDate;
-
-    public DateOnly EndDate
+    public MyDate EndDate
     {
         get => _endDate;
         set
         {
-            if (StartDate >= value)
+            if (StartDate.CompareTo(value))
+
             {
                 throw new ArgumentException("Invalid end date.");
             }
@@ -33,7 +34,8 @@ public class Premium: Client
         }
     }
 
-    private List<string> _benefits;
+    
+    private List<string> _benefits = [];
 
     public List<string> Benefits
     {
@@ -61,7 +63,7 @@ public class Premium: Client
         get => new List<Premium>(_premiumExtent);
     }
     
-    public Premium(int id, string email, string phone, DateOnly startDate, DateOnly endDate, List<string> benefits)
+    public Premium(int id, string email, string phone, MyDate startDate, MyDate endDate, List<string> benefits)
     {
         Id = id;
         Email = email;
@@ -82,12 +84,12 @@ public class Premium: Client
         {
             throw new ArgumentException("Cannot be null!");
         }
-        Benefits.Add(benefit);
+        _benefits.Add(benefit);
     }
     
     public void RemoveBenefit(int id)
     {
-        Benefits.RemoveAt(id);
+        _benefits.RemoveAt(id);
     }
     
     private static void AddToExtent(Premium premium)
@@ -134,6 +136,7 @@ public class Premium: Client
             {
                 _premiumExtent = (List<Premium>)xmlSerializer.Deserialize(reader);
             }
+
             catch (InvalidCastException)
             {
                 _premiumExtent.Clear();
@@ -141,6 +144,7 @@ public class Premium: Client
             }
             catch (Exception)
             {
+
                 _premiumExtent.Clear();
                 return false;
             }

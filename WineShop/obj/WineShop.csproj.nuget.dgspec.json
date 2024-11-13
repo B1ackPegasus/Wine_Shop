@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/shurikandrew/Downloads/WineShop 2/WineShop.csproj": {}
+    "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj": {}
   },
   "projects": {
-    "/Users/shurikandrew/Downloads/WineShop 2/WineShop.csproj": {
+    "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/shurikandrew/Downloads/WineShop 2/WineShop.csproj",
+        "projectUniqueName": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj",
         "projectName": "WineShop",
-        "projectPath": "/Users/shurikandrew/Downloads/WineShop 2/WineShop.csproj",
+        "projectPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj",
         "packagesPath": "/Users/shurikandrew/.nuget/packages/",
-        "outputPath": "/Users/shurikandrew/Downloads/WineShop 2/obj/",
+        "outputPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/shurikandrew/.nuget/NuGet/NuGet.Config"

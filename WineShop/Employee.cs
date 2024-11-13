@@ -14,7 +14,8 @@ public class Employee
         get => _pesel;
         set
         {
-            if (value < 0 || (value.ToString().Length < 11))
+            if (value < 0 || (value.ToString().Length < 9))
+
             {
                 throw new ArgumentException("Invalid pesel.");
             }

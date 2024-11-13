@@ -2,9 +2,6 @@
 
 using WineShop;
 
-Alcohol.load();
+using Type = WineShop.Type;
 
-
-
-Alcohol.save();
-
+Console.WriteLine("Start");

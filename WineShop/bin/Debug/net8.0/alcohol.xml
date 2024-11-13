@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?><ArrayOfAlcohol xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><Alcohol><Name>Whiskey</Name><Brand>Jack Daniels</Brand><Price>100</Price><Type>Spirit</Type><YearOfManufacture>2020</YearOfManufacture></Alcohol><Alcohol><Name>Whiskey Cola</Name><Brand>Jack Daniels </Brand><Price>30</Price><Type>Spirit</Type><YearOfManufacture>2020</YearOfManufacture></Alcohol></ArrayOfAlcohol>
+=======
+<?xml version="1.0" encoding="utf-8"?><ArrayOfAlcohol xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><Alcohol><Name>qwer</Name><Brand>Jack Daniels</Brand><Price>99.99</Price><Type>Spirit</Type><YearOfManufacture>2018</YearOfManufacture></Alcohol><Alcohol><Name>Beer</Name><Brand>Kozel</Brand><Price>10.99</Price><Type>Beer</Type><YearOfManufacture>2024</YearOfManufacture></Alcohol><Alcohol><Name>Whiskey</Name><Brand>Capitan Morgan</Brand><Price>120</Price><Type>Spirit</Type><YearOfManufacture>2020</YearOfManufacture></Alcohol></ArrayOfAlcohol>
+>>>>>>> 86ba72e (Full version)
