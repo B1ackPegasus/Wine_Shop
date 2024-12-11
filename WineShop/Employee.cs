@@ -83,6 +83,20 @@ public class Employee
         get => new List<Employee>(_employeeExtent);
     }
 
+    private List<Employee> _employees = [];
+
+    public List<Employee> Employees
+    {
+        get => new List<Employee>(_employees);
+    }
+    
+    private Employee? _manager = null;
+
+    public Employee? Manager
+    {
+        get => _manager;
+    } 
+
     public Employee(int pesel, string name, string surname, Address address)
     {
         Pesel = pesel;
@@ -92,9 +106,165 @@ public class Employee
         
         AddToExtent(this);
     }
+    
+    public Employee(int pesel, string name, string surname, Address address, List<Employee> employees)
+    {
+        Pesel = pesel;
+        Name = name;
+        Surname = surname;
+        Address = address;
+        
+        if (employees != null)
+        {
+            for (int i = 0; i < employees.Count; i++)
+            {
+                AddEmployee(employees[i]);
+            }
+        }
+        else
+        {
+            throw new ArgumentNullException();
+        }
+        
+        AddToExtent(this);
+    }
+    
+    public Employee(int pesel, string name, string surname, Address address, Employee manager)
+    {
+        Pesel = pesel;
+        Name = name;
+        Surname = surname;
+        Address = address;
+        
+        AddManager(manager);
+        
+        AddToExtent(this);
+    }
 
     public Employee()
     {
+    }
+
+    public void AddManager(Employee manager)
+    {
+        if (manager == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        if(Manager == null)
+        {
+            if (!manager._employees.Contains(this))
+            {
+                _manager = manager;
+                manager.AddEmployee(this);
+            }
+            else
+            {
+                _manager = manager;
+            }
+        }
+        else
+        {
+            throw new ArgumentException("This employee already has a manager!");
+        }
+    }
+
+    public void AddEmployee(Employee employee)
+    {
+        if (employee == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        if(employee.Manager == null)
+        {
+            _employees.Add(employee);
+            employee.AddManager(this);
+        }
+        else if (employee.Manager == this)
+        {
+            _employees.Add(employee);
+        }
+        else
+        {
+            throw new ArgumentException("This employee already has a manager!");
+        }
+    }
+
+    public void RemoveManager()
+    {
+        if (Manager != null)
+        {
+            if (Manager._employees.Contains(this))
+            {
+                Employee tempManager = Manager;
+                
+                _manager = null;
+                tempManager.RemoveEmployee(this);
+            }
+            else
+            {
+                _manager = null;
+            }
+        }
+        else
+        {
+            throw new ArgumentException("This employee does not have a manager!");
+        }
+        
+    }
+
+    public void RemoveEmployee(Employee employee)
+    {
+        if (employee == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (!_employees.Contains(employee))
+        {
+            throw new ArgumentException("There is no such employee for this manager!");
+        }
+        
+        _employees.Remove(employee);
+        if (employee.Manager == this)
+        {
+            employee.RemoveManager();
+        }
+    }
+
+    public void EditManager(Employee NewManager)
+    {
+        if (NewManager != null)
+        {
+            RemoveManager();
+            AddManager(NewManager);
+        }
+        else
+        {
+            throw new ArgumentNullException();
+        }
+    }
+
+    public void EditEmployees(List<Employee> NewEmployees)
+    {
+        if (NewEmployees != null)
+        {
+            for (int i = 0; i < _employees.Count; i++)
+            {
+                RemoveEmployee(_employees[i]);
+            }
+
+            for (int i = 0; i < NewEmployees.Count; i++)
+            {
+                AddEmployee(NewEmployees[i]);
+            }
+        }
+        else
+        {
+            throw new ArgumentNullException();
+        }
     }
 
     private static void AddToExtent(Employee employee)

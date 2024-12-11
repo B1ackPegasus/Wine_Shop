@@ -1003,11 +1003,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineSopTests/WineSopTests.csproj",
+      "projectUniqueName": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineSopTests/WineSopTests.csproj",
       "projectName": "WineSopTests",
-      "projectPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineSopTests/WineSopTests.csproj",
+      "projectPath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineSopTests/WineSopTests.csproj",
       "packagesPath": "/Users/shurikandrew/.nuget/packages/",
-      "outputPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineSopTests/obj/",
+      "outputPath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineSopTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/shurikandrew/.nuget/NuGet/NuGet.Config"
@@ -1022,8 +1022,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj": {
-              "projectPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj"
+            "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/WineShop.csproj": {
+              "projectPath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/WineShop.csproj"
             }
           }
         }

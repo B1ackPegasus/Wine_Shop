@@ -31,3 +31,18 @@
 /Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/obj/Debug/net8.0/ref/WineShop.dll
 >>>>>>> 86ba72e (Full version)
 /Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/obj/Debug/net8.0/WineShop.sourcelink.json
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/bin/Debug/net8.0/WineShop
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/bin/Debug/net8.0/WineShop.deps.json
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/bin/Debug/net8.0/WineShop.runtimeconfig.json
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/bin/Debug/net8.0/WineShop.dll
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/bin/Debug/net8.0/WineShop.pdb
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.GeneratedMSBuildEditorConfig.editorconfig
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.AssemblyInfoInputs.cache
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.AssemblyInfo.cs
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.csproj.CoreCompileInputs.cache
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.sourcelink.json
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.dll
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/refint/WineShop.dll
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.pdb
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/WineShop.genruntimeconfig.cache
+/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/Debug/net8.0/ref/WineShop.dll

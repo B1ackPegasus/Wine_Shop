@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj",
+      "projectUniqueName": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/WineShop.csproj",
       "projectName": "WineShop",
-      "projectPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/WineShop.csproj",
+      "projectPath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/WineShop.csproj",
       "packagesPath": "/Users/shurikandrew/.nuget/packages/",
-      "outputPath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineShop/obj/",
+      "outputPath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineShop/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/shurikandrew/.nuget/NuGet/NuGet.Config"

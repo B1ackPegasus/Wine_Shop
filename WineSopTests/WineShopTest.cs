@@ -407,7 +407,7 @@ public class Tests
         Assert.That(employee0.Pesel, Is.EqualTo(Employee.EmployeeExtent[1].Pesel));
     }
     
-    [Test]
+    [Test, Order(1)]
     public void CheckEmployeeExtentStoresCorrectAmount()
     {
         Assert.That(Employee.EmployeeExtent.Count, Is.EqualTo(2));
@@ -1011,6 +1011,132 @@ public class Tests
         Store.StoreExtent.Clear();
         Assert.That(Store.StoreExtent.Count, Is.GreaterThan(0));
     }
+
+//-------------------------------NEW TESTS FOR ASSOCIATIONS---------------------------------------------
+    [Test]
+    public void CheckEmployeeAddManager()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"));
+        emp.AddManager(manager);
+        Assert.True(emp.Pesel == manager.Employees[0].Pesel && manager.Pesel == emp.Manager.Pesel);
+    }
+    
+    [Test]
+    public void CheckEmployeeRemoveManager()
+    {
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"));
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"), manager);
+        emp.RemoveManager();
+        Assert.True(emp.Manager == null && manager.Employees.Count == 0);
+    }
+    
+    [Test]
+    public void CheckEmployeeEditManager()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"), [emp]);
+        Employee newManager = new Employee(123132323, "Jenifer", "Watson", new Address("Short", 21, 7, "12-316"));
+        emp.EditManager(newManager);
+        Assert.True(emp.Pesel == newManager.Employees[0].Pesel && newManager.Pesel == emp.Manager.Pesel && manager.Employees.Count == 0);
+    }
+    
+    [Test]
+    public void CheckEmployeeAddEmployee()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"));
+        manager.AddEmployee(emp);
+        Assert.True(emp.Pesel == manager.Employees[0].Pesel && manager.Pesel == emp.Manager.Pesel);
+    }
+    
+    [Test]
+    public void CheckEmployeeRemoveEmployee()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"), [emp]);
+        manager.RemoveEmployee(emp);
+        Assert.True(emp.Manager == null && manager.Employees.Count == 0);
+    }
+    
+    [Test]
+    public void CheckEmployeeEditEmployees()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"), [emp]);
+        Employee newEmployee = new Employee(123132323, "Jenifer", "Watson", new Address("Short", 21, 7, "12-316"));
+        manager.EditEmployees([newEmployee]);
+        Assert.True(newEmployee.Pesel == manager.Employees[0].Pesel && manager.Pesel == newEmployee.Manager.Pesel && emp.Manager == null);
+    }
+    
+    [Test]
+    public void CheckEmployeeAddManagerNullException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentNullException>(() => emp.AddManager(null));
+    }
+    
+    [Test]
+    public void CheckEmployeeAddManagerEmployeeAlreadyHasAManagerException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"), [emp]);
+        Employee anotherManager = new Employee(123132323, "Jenifer", "Watson", new Address("Short", 21, 7, "12-316"));
+        Assert.Throws<ArgumentException>(() => emp.AddManager(anotherManager));
+    }
+
+    [Test]
+    public void CheckEmployeeAddEmployeeEmployeeAlreadyHasAManagerException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"), [emp]);
+        Employee anotherManager = new Employee(123132323, "Jenifer", "Watson", new Address("Short", 21, 7, "12-316"));
+        Assert.Throws<ArgumentException>(() => anotherManager.AddEmployee(emp));
+    }
+
+    [Test]
+    public void CheckEmployeeAddEmployeeNullException()
+    {
+        Employee manager = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentNullException>(() => manager.AddEmployee(null));
+    }
+    
+    [Test]
+    public void CheckEmployeeRemoveManagerEmployeeDoesNotHaveAManagerException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentException>(() => emp.RemoveManager());
+    }
+    
+    [Test]
+    public void CheckEmployeeRemoveEmployeeNullException()
+    {
+        Employee manager = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentNullException>(() => manager.RemoveEmployee(null));
+    }
+    
+    [Test]
+    public void CheckEmployeeRemoveEmployeeManagerDoesNotHaveThisEmployeeException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Employee manager = new Employee(227654333, "Joe", "Stevenson", new Address("Long", 12, 7, "12-326"));
+        Assert.Throws<ArgumentException>(() => manager.RemoveEmployee(emp));
+    }
+    
+    [Test]
+    public void CheckEmployeeEditManagerNullException()
+    {
+        Employee emp = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentNullException>(() => emp.EditManager(null));
+    }
+    
+    [Test]
+    public void CheckEmployeeEditEmployeesNullException()
+    {
+        Employee manager = new Employee(987654333, "Jane", "Smith", new Address("Long", 13, 7, "12-456"));
+        Assert.Throws<ArgumentNullException>(() => manager.EditEmployees(null));
+    }
+    
 }
     
 

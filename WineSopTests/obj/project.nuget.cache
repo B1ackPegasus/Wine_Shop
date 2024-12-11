@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dSN6gFvE+QrCapWHZecDlYvgXvUMT85uTLf2h4pgXSygxv+OlIWd/5JdNekx9k7saGxeLvWhqwiBz94FDxlf4A==",
+  "dgSpecHash": "GHbhRWvIguH/lDG8N+Z9Dnz7IMPR/2ImWUXiF7b0BGyPDgvB23ouE1STlj9+bgoWMnTgrNNKijyGpNHWmrAofg==",
   "success": true,
-  "projectFilePath": "/Users/shurikandrew/BYT/Wine_Shop_Project/WineSopTests/WineSopTests.csproj",
+  "projectFilePath": "/Users/shurikandrew/Downloads/BYT_Connections/Wine_Shop/WineSopTests/WineSopTests.csproj",
   "expectedPackageFiles": [
     "/Users/shurikandrew/.nuget/packages/coverlet.collector/6.0.0/coverlet.collector.6.0.0.nupkg.sha512",
     "/Users/shurikandrew/.nuget/packages/microsoft.codecoverage/17.8.0/microsoft.codecoverage.17.8.0.nupkg.sha512",
