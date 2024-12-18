@@ -83,11 +83,11 @@ public class Employee
         get => new List<Employee>(_employeeExtent);
     }
 
-    private List<Employee> _employees = [];
+    private List<Employee> _employeesUnderThisManager = [];
 
-    public List<Employee> Employees
+    public List<Employee> EmployeesUnderThisManager
     {
-        get => new List<Employee>(_employees);
+        get => new List<Employee>(_employeesUnderThisManager);
     }
     
     private Employee? _manager = null;
@@ -95,30 +95,41 @@ public class Employee
     public Employee? Manager
     {
         get => _manager;
-    } 
+    }
 
-    public Employee(int pesel, string name, string surname, Address address)
+    private Facility _facilityWhereEmployeeWorks;
+
+    public Facility FacilityWhereEmployeeWorks
+    {
+        get => _facilityWhereEmployeeWorks;
+    }
+
+    public Employee(int pesel, string name, string surname, Address address, Facility facility)
     {
         Pesel = pesel;
         Name = name;
         Surname = surname;
         Address = address;
         
+        AddFacilityForEmployee(facility);
+        
         AddToExtent(this);
     }
     
-    public Employee(int pesel, string name, string surname, Address address, List<Employee> employees)
+    public Employee(int pesel, string name, string surname, Address address, Facility facility, List<Employee> employees)
     {
         Pesel = pesel;
         Name = name;
         Surname = surname;
         Address = address;
+        
+        AddFacilityForEmployee(facility);
         
         if (employees != null)
         {
             for (int i = 0; i < employees.Count; i++)
             {
-                AddEmployee(employees[i]);
+                AddEmployeeToManager(employees[i]);
             }
         }
         else
@@ -129,12 +140,14 @@ public class Employee
         AddToExtent(this);
     }
     
-    public Employee(int pesel, string name, string surname, Address address, Employee manager)
+    public Employee(int pesel, string name, string surname, Address address, Facility facility, Employee manager)
     {
         Pesel = pesel;
         Name = name;
         Surname = surname;
         Address = address;
+        
+        AddFacilityForEmployee(facility);
         
         AddManager(manager);
         
@@ -143,6 +156,62 @@ public class Employee
 
     public Employee()
     {
+    }
+
+    public void AddFacilityForEmployee(Facility facility)
+    {
+        if (facility == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (!facility.EmployeesWorkInThisFacility.Contains(this))
+        {
+            _facilityWhereEmployeeWorks = facility;
+            facility.AddEmployeeToFacility(this);
+        }
+        else
+        {
+            _facilityWhereEmployeeWorks = facility;
+        }
+    }
+
+    public void EditFacilityForEmployee(Facility facility)
+    {
+        if (facility == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        if (facility == FacilityWhereEmployeeWorks)
+        {
+            throw new ArgumentException("Employee already works in this facility");
+        }
+        else
+        {
+            FacilityWhereEmployeeWorks.RemoveEmployeeFromFacility(this);
+            _facilityWhereEmployeeWorks = facility;
+            facility.AddEmployeeToFacility(this);
+        }
+        
+    }
+
+    public void DeleteEmployee()
+    {
+        _employeeExtent.Remove(this);
+        
+        if (Manager != null)
+        {
+            RemoveManager();
+        }
+
+        if (EmployeesUnderThisManager.Count != 0)
+        {
+            for (int i = 0; i < EmployeesUnderThisManager.Count; i++)
+            {
+                RemoveEmployeeFromManager(EmployeesUnderThisManager[i]);
+            }
+        }
     }
 
     public void AddManager(Employee manager)
@@ -154,10 +223,10 @@ public class Employee
         
         if(Manager == null)
         {
-            if (!manager._employees.Contains(this))
+            if (!manager._employeesUnderThisManager.Contains(this))
             {
                 _manager = manager;
-                manager.AddEmployee(this);
+                manager.AddEmployeeToManager(this);
             }
             else
             {
@@ -170,7 +239,7 @@ public class Employee
         }
     }
 
-    public void AddEmployee(Employee employee)
+    public void AddEmployeeToManager(Employee employee)
     {
         if (employee == null)
         {
@@ -179,12 +248,12 @@ public class Employee
         
         if(employee.Manager == null)
         {
-            _employees.Add(employee);
+            _employeesUnderThisManager.Add(employee);
             employee.AddManager(this);
         }
         else if (employee.Manager == this)
         {
-            _employees.Add(employee);
+            _employeesUnderThisManager.Add(employee);
         }
         else
         {
@@ -196,12 +265,12 @@ public class Employee
     {
         if (Manager != null)
         {
-            if (Manager._employees.Contains(this))
+            if (Manager._employeesUnderThisManager.Contains(this))
             {
                 Employee tempManager = Manager;
                 
                 _manager = null;
-                tempManager.RemoveEmployee(this);
+                tempManager.RemoveEmployeeFromManager(this);
             }
             else
             {
@@ -215,19 +284,19 @@ public class Employee
         
     }
 
-    public void RemoveEmployee(Employee employee)
+    public void RemoveEmployeeFromManager(Employee employee)
     {
         if (employee == null)
         {
             throw new ArgumentNullException();
         }
 
-        if (!_employees.Contains(employee))
+        if (!_employeesUnderThisManager.Contains(employee))
         {
             throw new ArgumentException("There is no such employee for this manager!");
         }
         
-        _employees.Remove(employee);
+        _employeesUnderThisManager.Remove(employee);
         if (employee.Manager == this)
         {
             employee.RemoveManager();
@@ -251,14 +320,14 @@ public class Employee
     {
         if (NewEmployees != null)
         {
-            for (int i = 0; i < _employees.Count; i++)
+            for (int i = 0; i < _employeesUnderThisManager.Count; i++)
             {
-                RemoveEmployee(_employees[i]);
+                RemoveEmployeeFromManager(_employeesUnderThisManager[i]);
             }
 
             for (int i = 0; i < NewEmployees.Count; i++)
             {
-                AddEmployee(NewEmployees[i]);
+                AddEmployeeToManager(NewEmployees[i]);
             }
         }
         else

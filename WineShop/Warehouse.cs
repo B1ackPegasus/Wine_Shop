@@ -99,4 +99,14 @@ public class Warehouse:Facility
         }
         return true;
     }
+
+    public override void DeleteFacility()
+    {
+        _warehouseExtent.Remove(this);
+        
+        for (int i = 0; i < EmployeesWorkInThisFacility.Count; i++)
+        {
+            EmployeesWorkInThisFacility[i].DeleteEmployee();
+        }
+    }
 }

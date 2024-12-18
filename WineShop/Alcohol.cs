@@ -6,7 +6,6 @@ namespace WineShop;
 [Serializable]
 public class Alcohol
 {
-   //id?
    private string _name;
 
    public string Name
@@ -98,6 +97,13 @@ public class Alcohol
         get => new List<Alcohol>(_alcoholExtent);
     }
 
+    private List<Cocktail> _cocktailsWithThisAlcohol = [];
+
+    public List<Cocktail> CocktailsWithThisAlcohol
+    {
+        get => new List<Cocktail>(_cocktailsWithThisAlcohol);
+    }
+    
     public Alcohol(string name, string brand, double price, Type type, int yearOfManufacture)
     {
         Name = name;
@@ -114,6 +120,28 @@ public class Alcohol
 
     public Alcohol()
     {
+    }
+
+    public void AddCocktailWithAlcohol(Cocktail cocktail)
+    {
+        if (cocktail == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (!CocktailsWithThisAlcohol.Contains(cocktail))
+        {
+            _cocktailsWithThisAlcohol.Add(cocktail);
+
+            if (!cocktail.AlcoholUsedInCocktail.ContainsValue(this))
+            {
+                cocktail.AddAlcoholToCocktail(this);
+            }
+        }
+        else
+        {
+            throw new ArgumentException("This cocktail is already added!");
+        }
     }
 
     private static void AddToExtent(Alcohol alcohol)

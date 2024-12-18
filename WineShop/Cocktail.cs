@@ -59,6 +59,22 @@ public class Cocktail
     {
         get => new List<Cocktail>(_cocktailExtent);
     }
+    
+    private Dictionary<int, Alcohol> _alcoholUsedInCocktail = new Dictionary<int, Alcohol>();
+
+    public Dictionary<int, Alcohol> AlcoholUsedInCocktail
+    {
+        get => new Dictionary<int, Alcohol>(_alcoholUsedInCocktail);
+    }
+        
+    private Dictionary<int, int> _volumeOfAlcoholInCocktail = new Dictionary<int, int>();
+    
+    public Dictionary<int, int> VolumeOfAlcoholInCocktail
+    {
+        get => new Dictionary<int, int>(_volumeOfAlcoholInCocktail);
+    }
+    
+    public static int Alcohol_Id = 0;
 
     public Cocktail(int id, string name, List<string> listOfIngredients)
     {
@@ -70,6 +86,21 @@ public class Cocktail
 
     public Cocktail()
     {
+    }
+
+    public void AddAlcoholToCocktail( Alcohol alcohol)
+    {
+        if ( alcohol == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        AlcoholUsedInCocktail.Add(Alcohol_Id+1, alcohol);
+        
+        if (!alcohol.CocktailsWithThisAlcohol.Contains(this))
+        {
+            alcohol.AddCocktailWithAlcohol(this);
+        }
     }
 
     public void AddIngredient(string ingredient)

@@ -106,4 +106,14 @@ public class Store:Facility
         }
         return true;
     }
+    
+    public override void DeleteFacility()
+    {
+        _storeExtent.Remove(this);
+        
+        for (int i = 0; i < EmployeesWorkInThisFacility.Count; i++)
+        {
+            EmployeesWorkInThisFacility[i].DeleteEmployee();
+        }
+    }
 }
