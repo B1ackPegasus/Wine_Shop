@@ -122,26 +122,47 @@ public class Alcohol
     {
     }
 
-    public void AddCocktailWithAlcohol(Cocktail cocktail)
+    public void AddCocktailWithAlcohol(Cocktail cocktail, int Volume)
+    {
+        if (cocktail == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        _cocktailsWithThisAlcohol.Add(cocktail);
+        
+        if (cocktail.AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1)
+        {
+            cocktail.AddAlcoholToCocktail(this, Volume);
+        }
+    }
+
+    public void RemoveCocktailForAlcohol(Cocktail cocktail)
     {
         if (cocktail == null)
         {
             throw new ArgumentNullException();
         }
 
-        if (!CocktailsWithThisAlcohol.Contains(cocktail))
+        if (CocktailsWithThisAlcohol.Contains(cocktail))
         {
-            _cocktailsWithThisAlcohol.Add(cocktail);
-
-            if (!cocktail.AlcoholUsedInCocktail.ContainsValue(this))
+            _cocktailsWithThisAlcohol.Remove(cocktail);
+            
+            if (cocktail.AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1)
             {
-                cocktail.AddAlcoholToCocktail(this);
+                cocktail.RemoveAlcoholFromCocktail(this);
             }
         }
         else
         {
-            throw new ArgumentException("This cocktail is already added!");
+            throw new ArgumentException("There is no such cocktail for this alcohol!");
         }
+    }
+
+    public void EditCocktailForAlcohol(Cocktail cocktail1, Cocktail cocktail2, int Volume)
+    {
+        RemoveCocktailForAlcohol(cocktail1);
+        AddCocktailWithAlcohol(cocktail2, Volume);
     }
 
     private static void AddToExtent(Alcohol alcohol)

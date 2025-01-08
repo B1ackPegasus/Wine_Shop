@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WineSopTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+03cbc40c29314f455df325343837b2afba5d8e96")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+119c84fb609fc4545cdb39c8c7d154abd1411ccf")]
 [assembly: System.Reflection.AssemblyProductAttribute("WineSopTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WineSopTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

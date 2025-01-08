@@ -59,19 +59,18 @@ public class Cocktail
     {
         get => new List<Cocktail>(_cocktailExtent);
     }
-    
-    private Dictionary<int, Alcohol> _alcoholUsedInCocktail = new Dictionary<int, Alcohol>();
+    private List<KeyValuePair<int, Alcohol>> _alcoholUsedInCocktail = new List<KeyValuePair<int, Alcohol>>();
 
-    public Dictionary<int, Alcohol> AlcoholUsedInCocktail
+    public List<KeyValuePair<int, Alcohol>> AlcoholUsedInCocktail
     {
-        get => new Dictionary<int, Alcohol>(_alcoholUsedInCocktail);
+        get => new List<KeyValuePair<int, Alcohol>>(_alcoholUsedInCocktail);
     }
-        
-    private Dictionary<int, int> _volumeOfAlcoholInCocktail = new Dictionary<int, int>();
     
-    public Dictionary<int, int> VolumeOfAlcoholInCocktail
+    private List<KeyValuePair<int, int>> _volumeOfAlcoholInCocktail = new List<KeyValuePair<int, int>>();
+    
+    public List<KeyValuePair<int, int>> VolumeOfAlcoholInCocktail
     {
-        get => new Dictionary<int, int>(_volumeOfAlcoholInCocktail);
+        get => new List<KeyValuePair<int, int>>(_volumeOfAlcoholInCocktail);
     }
     
     public static int Alcohol_Id = 0;
@@ -88,19 +87,53 @@ public class Cocktail
     {
     }
 
-    public void AddAlcoholToCocktail( Alcohol alcohol)
+    public void AddAlcoholToCocktail( Alcohol alcohol, int Volume)
     {
         if ( alcohol == null)
         {
             throw new ArgumentNullException();
         }
-        
-        AlcoholUsedInCocktail.Add(Alcohol_Id+1, alcohol);
+
+        Alcohol_Id += 1;
+        _alcoholUsedInCocktail.Add(new KeyValuePair<int, Alcohol>(Alcohol_Id, alcohol));
+        _volumeOfAlcoholInCocktail.Add(new KeyValuePair<int, int>(Alcohol_Id, Volume));
         
         if (!alcohol.CocktailsWithThisAlcohol.Contains(this))
         {
-            alcohol.AddCocktailWithAlcohol(this);
+            alcohol.AddCocktailWithAlcohol(this, Volume);
         }
+    }
+
+    public void RemoveAlcoholFromCocktail(Alcohol alcohol)
+    {
+        if (alcohol == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == alcohol, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 )
+        {
+            var key = AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == alcohol).Key;
+            _alcoholUsedInCocktail.Remove(new KeyValuePair<int, Alcohol>(key, alcohol));
+            
+            var index = _volumeOfAlcoholInCocktail.FindIndex(alc => alc.Key == key);
+            _volumeOfAlcoholInCocktail.RemoveAt(index);
+
+            if (alcohol.CocktailsWithThisAlcohol.Contains(this))
+            {
+                alcohol.RemoveCocktailForAlcohol(this);
+            }
+        }
+        else
+        {
+            throw new ArgumentException("There is no such alcohol!");
+        }
+    }
+
+    public void EditAlcoholInCocktail(Alcohol alcohol1, Alcohol alcohol2, int Volume)
+    {
+        RemoveAlcoholFromCocktail(alcohol1);
+        AddAlcoholToCocktail(alcohol2, Volume);
     }
 
     public void AddIngredient(string ingredient)
