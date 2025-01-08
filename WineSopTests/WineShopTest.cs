@@ -161,7 +161,7 @@ public class Tests
         Assert.That(Alcohol.AlcoholExtent.Count, Is.EqualTo(2));
     }
 
-    [Test]
+    [Test, Order(7)]
     public void CheckAlcoholExtentPersistence()
     {
         List<Alcohol> alcohols = Alcohol.AlcoholExtent;
