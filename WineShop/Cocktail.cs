@@ -73,7 +73,7 @@ public class Cocktail
         get => new List<KeyValuePair<int, int>>(_volumeOfAlcoholInCocktail);
     }
     
-    public static int Alcohol_Id = 0;
+    public int Alcohol_Id = 0;
 
     public Cocktail(int id, string name, List<string> listOfIngredients)
     {

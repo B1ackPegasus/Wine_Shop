@@ -678,7 +678,7 @@ public class Tests
         Assert.That(nonPremium0.Id, Is.EqualTo(NonPremium.NonPremiumExtent[1].Id));
     }
 
-    [Test]
+    [Test, Order(6)]
     public void CheckNonPremiumExtentStoresCorrectAmount()
     {
         Assert.That(NonPremium.NonPremiumExtent.Count, Is.EqualTo(2));
@@ -1302,7 +1302,8 @@ public class Tests
         cocktail.RemoveAlcoholFromCocktail(alcohol);
         Assert.True(alcohol.CocktailsWithThisAlcohol.Count == 0 &&
                     cocktail.AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == alcohol,
-                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1);
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    cocktail.VolumeOfAlcoholInCocktail.Count == 0);
     }
 
     [Test]
@@ -1318,7 +1319,8 @@ public class Tests
                         new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
                     alcohol2.CocktailsWithThisAlcohol[0] == cocktail && cocktail.AlcoholUsedInCocktail
                         .FirstOrDefault(alc => alc.Value == alcohol2, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
-                        .Key != -1);
+                        .Key != -1 &&
+                    cocktail.VolumeOfAlcoholInCocktail[0].Value == 60);
     }
 
     [Test]
@@ -1331,7 +1333,7 @@ public class Tests
     [Test]
     public void CheckRemoveAlcoholFromCocktailAlcoholEqualsNull()
     {
-        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Cocktail cocktail = new Cocktail(1, "Mojito", ["mint", "ice", "sprite", "lime"]);
         Assert.Throws<ArgumentNullException>(() => cocktail.RemoveAlcoholFromCocktail(null));
     }
 
@@ -1353,7 +1355,8 @@ public class Tests
         Assert.True(cocktail.AlcoholUsedInCocktail
                         .FirstOrDefault(alc => alc.Value == alcohol, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
                         .Key != -1 &&
-                    alcohol.CocktailsWithThisAlcohol.Contains(cocktail));
+                    alcohol.CocktailsWithThisAlcohol.Contains(cocktail) &&
+                    cocktail.VolumeOfAlcoholInCocktail[0].Value == 200);
     }
 
     [Test]
@@ -1365,7 +1368,8 @@ public class Tests
         alcohol.RemoveCocktailForAlcohol(cocktail);
         Assert.True(alcohol.CocktailsWithThisAlcohol.Count == 0 &&
                     cocktail.AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == alcohol,
-                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1);
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    cocktail.VolumeOfAlcoholInCocktail.Count == 0);
     }
 
     [Test]
@@ -1380,7 +1384,8 @@ public class Tests
                     cocktail2.AlcoholUsedInCocktail.FirstOrDefault(alc => alc.Value == alcohol,
                         new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 &&
                     alcohol.CocktailsWithThisAlcohol[0] == cocktail2 &&
-                    !alcohol.CocktailsWithThisAlcohol.Contains(cocktail));
+                    !alcohol.CocktailsWithThisAlcohol.Contains(cocktail) &&
+                    cocktail2.VolumeOfAlcoholInCocktail[0].Value == 150);
     }
 
     [Test]
@@ -1404,5 +1409,261 @@ public class Tests
         Assert.Throws<ArgumentNullException>(() => alcohol.RemoveCocktailForAlcohol(null));
     }
     
+    [Test]
+    public void CheckAddAlcoholToFacility()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        warehouse.AddAlcoholToFacility(alcohol, 50);
+        Assert.True(alcohol.FacilitiesWithThisAlcohol[0] == warehouse &&
+                    warehouse.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 &&
+                    warehouse.QuantityOfAlcoholAtFacility[0].Value == 50);
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromFacility()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        warehouse.AddAlcoholToFacility(alcohol, 50);
+        warehouse.RemoveAlcoholFromFacility(alcohol);
+        Assert.True(alcohol.FacilitiesWithThisAlcohol.Count == 0 &&
+                    warehouse.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    warehouse.QuantityOfAlcoholAtFacility.Count == 0);
+    }
+
+    [Test]
+    public void CheckEditAlcoholInFacility()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Alcohol alcohol2 = new Alcohol("Whiskey", "Capitan Morgan", 129.99, Type.Spirit, 2016);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        warehouse.AddAlcoholToFacility(alcohol, 50);
+        warehouse.EditAlcoholInFacility(alcohol, alcohol2, 60);
+        Assert.True(alcohol.FacilitiesWithThisAlcohol.Count == 0 &&
+                    warehouse.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    alcohol2.FacilitiesWithThisAlcohol[0] == warehouse && warehouse.AlcoholStoredAtFacility
+                        .FirstOrDefault(alc => alc.Value == alcohol2, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
+                        .Key != -1 &&
+                    warehouse.QuantityOfAlcoholAtFacility[0].Value == 60);
+    }
     
+    [Test]
+    public void CheckAddAlcoholToFacilityAlcoholEqualsNull()
+    {
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        Assert.Throws<ArgumentNullException>(() => warehouse.AddAlcoholToFacility(null, 50));
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromFacilityAlcoholEqualsNull()
+    {
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        Assert.Throws<ArgumentNullException>(() => warehouse.RemoveAlcoholFromFacility(null));
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromFacilityThereIsNoSuchAlcohol()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+
+        Assert.Throws<ArgumentException>(() => warehouse.RemoveAlcoholFromFacility(alcohol));
+    }
+
+    [Test]
+    public void CheckAddFacilityWithAlcohol()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        alcohol.AddFacilityWithAlcohol(warehouse, 200);
+        Assert.True(warehouse.AlcoholStoredAtFacility
+                        .FirstOrDefault(alc => alc.Value == alcohol, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
+                        .Key != -1 &&
+                    alcohol.FacilitiesWithThisAlcohol.Contains(warehouse) &&
+                    warehouse.QuantityOfAlcoholAtFacility[0].Value == 200);
+    }
+
+    [Test]
+    public void CheckRemoveFacilityWithAlcohol()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        alcohol.AddFacilityWithAlcohol(warehouse, 300);
+        alcohol.RemoveFacilityWithAlcohol(warehouse);
+        Assert.True(alcohol.FacilitiesWithThisAlcohol.Count == 0 &&
+                    warehouse.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    warehouse.QuantityOfAlcoholAtFacility.Count == 0);
+    }
+
+    [Test]
+    public void CheckEditFacilityWithAlcohol()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Facility warehouse = new Warehouse(20, 1, new Address("Long", 10, 6, "12-446"));
+        Facility store = new Store(1, new Address("Long", 10, 8, "12-446"), new Time(8, 0, 0), new Time(23, 0, 0));
+        alcohol.AddFacilityWithAlcohol(warehouse, 300);
+        alcohol.EditFacilityWithAlcohol(warehouse, store, 150);
+        Assert.True(warehouse.AlcoholStoredAtFacility.Count == 0 &&
+                    store.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 &&
+                    alcohol.FacilitiesWithThisAlcohol[0] == store &&
+                    !alcohol.FacilitiesWithThisAlcohol.Contains(warehouse) &&
+                    store.QuantityOfAlcoholAtFacility[0].Value == 150);
+    }
+
+    [Test]
+    public void AddFacilityWithAlcoholCocktailEqualsNull()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Assert.Throws<ArgumentNullException>(() => alcohol.AddFacilityWithAlcohol(null, 50));
+    }
+
+    [Test]
+    public void RemoveFacilityWithAlcoholClientEqualsNull()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Assert.Throws<ArgumentNullException>(() => alcohol.RemoveFacilityWithAlcohol(null));
+    }
+
+    [Test]
+    public void RemoveFacilityWithAlcoholNoSuchFacility()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Facility store = new Store(1, new Address("Long", 10, 8, "12-446"), new Time(8, 0, 0), new Time(23, 0, 0));
+        Assert.Throws<ArgumentException>(() => alcohol.RemoveFacilityWithAlcohol(store));
+    }
+    
+    [Test]
+    public void CheckAddAlcoholToCart()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        client.AddAlcoholToCart(alcohol, 50);
+        Assert.True(alcohol.ClientsWithThisAlcoholInCart[0] == client &&
+                    client.AlcoholInCart.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 &&
+                    client.QuantityOfAlcoholInCart[0].Value == 50);
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromCart()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        client.AddAlcoholToCart(alcohol, 50);
+        client.RemoveAlcoholFromCart(alcohol);
+        Assert.True(alcohol.ClientsWithThisAlcoholInCart.Count == 0 &&
+                    client.AlcoholInCart.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    client.QuantityOfAlcoholInCart.Count == 0);
+    }
+
+    [Test]
+    public void CheckEditAlcoholInCart()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Alcohol alcohol2 = new Alcohol("Whiskey", "Capitan Morgan", 129.99, Type.Spirit, 2016);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        client.AddAlcoholToCart(alcohol, 50);
+        client.EditAlcoholInCart(alcohol, alcohol2, 60);
+        Assert.True(alcohol.ClientsWithThisAlcoholInCart.Count == 0 &&
+                    client.AlcoholInCart.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    alcohol2.ClientsWithThisAlcoholInCart[0] == client && client.AlcoholInCart
+                        .FirstOrDefault(alc => alc.Value == alcohol2, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
+                        .Key != -1 &&
+                    client.QuantityOfAlcoholInCart[0].Value == 60);
+    }
+    
+    [Test]
+    public void CheckAddAlcoholToCartAlcoholEqualsNull()
+    {
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        Assert.Throws<ArgumentNullException>(() => client.AddAlcoholToCart(null, 50));
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromCartAlcoholEqualsNull()
+    {
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        Assert.Throws<ArgumentNullException>(() => client.RemoveAlcoholFromCart(null));
+    }
+
+    [Test]
+    public void CheckRemoveAlcoholFromCartThereIsNoSuchAlcohol()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+
+        Assert.Throws<ArgumentException>(() => client.RemoveAlcoholFromCart(alcohol));
+    }
+
+    [Test]
+    public void CheckAddClientWithAlcoholInCart()
+    {
+        Alcohol alcohol = new Alcohol("Whiskey", "Jack Daniels", 99.99, Type.Spirit, 2018);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        alcohol.AddClientWithAlcoholInCart(client, 200);
+        Assert.True(client.AlcoholInCart
+                        .FirstOrDefault(alc => alc.Value == alcohol, new KeyValuePair<int, Alcohol>(-1, new Alcohol()))
+                        .Key != -1 &&
+                    alcohol.ClientsWithThisAlcoholInCart.Contains(client) &&
+                    client.QuantityOfAlcoholInCart[0].Value == 200);
+    }
+
+    [Test]
+    public void CheckRemoveClientWithAlcoholInCart()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        alcohol.AddClientWithAlcoholInCart(client, 300);
+        alcohol.RemoveClientWithAlcoholInCart(client);
+        Assert.True(alcohol.ClientsWithThisAlcoholInCart.Count == 0 &&
+                    client.AlcoholInCart.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1 &&
+                    client.QuantityOfAlcoholInCart.Count == 0);
+    }
+
+    [Test]
+    public void CheckEditClientWithAlcoholInCart()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        Client client2 = new NonPremium(2, "newestuser@mail.com", "234454749");
+        alcohol.AddClientWithAlcoholInCart(client, 300);
+        alcohol.EditClientWithAlcoholInCart(client, client2, 150);
+        Assert.True(client.AlcoholInCart.Count == 0 &&
+                    client2.AlcoholInCart.FirstOrDefault(alc => alc.Value == alcohol,
+                        new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1 &&
+                    alcohol.ClientsWithThisAlcoholInCart[0] == client2 &&
+                    !alcohol.ClientsWithThisAlcoholInCart.Contains(client) &&
+                    client2.QuantityOfAlcoholInCart[0].Value == 150);
+    }
+
+    [Test]
+    public void AddClientWithAlcoholInCartClientEqualsNull()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Assert.Throws<ArgumentNullException>(() => alcohol.AddClientWithAlcoholInCart(null, 50));
+    }
+
+    [Test]
+    public void RemoveClientWithAlcoholInCartClientEqualsNull()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Assert.Throws<ArgumentNullException>(() => alcohol.RemoveClientWithAlcoholInCart(null));
+    }
+
+    [Test]
+    public void RemoveClientWithAlcoholInCartNoSuchClient()
+    {
+        Alcohol alcohol = new Alcohol("Rum", "Bacardi", 199.99, Type.Spirit, 2020);
+        Client client = new NonPremium(1, "newuser@mail.com", "234654789");
+        Assert.Throws<ArgumentException>(() => alcohol.RemoveClientWithAlcoholInCart(client));
+    }
 }

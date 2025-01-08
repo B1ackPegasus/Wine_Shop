@@ -104,6 +104,20 @@ public class Alcohol
         get => new List<Cocktail>(_cocktailsWithThisAlcohol);
     }
     
+    private List<Facility> _facilitiesWithThisAlcohol = [];
+
+    public List<Facility> FacilitiesWithThisAlcohol
+    {
+        get => new List<Facility>(_facilitiesWithThisAlcohol);
+    }
+    
+    private List<Client> _clientsWithThisAlcoholInCart = [];
+
+    public List<Client> ClientsWithThisAlcoholInCart
+    {
+        get => new List<Client>(_clientsWithThisAlcoholInCart);
+    }
+    
     public Alcohol(string name, string brand, double price, Type type, int yearOfManufacture)
     {
         Name = name;
@@ -164,7 +178,93 @@ public class Alcohol
         RemoveCocktailForAlcohol(cocktail1);
         AddCocktailWithAlcohol(cocktail2, Volume);
     }
+    
+    public void AddFacilityWithAlcohol(Facility facility, int Quantity)
+    {
+        if (facility == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        _facilitiesWithThisAlcohol.Add(facility);
+        
+        if (facility.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1)
+        {
+            facility.AddAlcoholToFacility(this, Quantity);
+        }
+    }
 
+    public void RemoveFacilityWithAlcohol(Facility facility)
+    {
+        if (facility == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (FacilitiesWithThisAlcohol.Contains(facility))
+        {
+            _facilitiesWithThisAlcohol.Remove(facility);
+            
+            if (facility.AlcoholStoredAtFacility.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1)
+            {
+                facility.RemoveAlcoholFromFacility(this);
+            }
+        }
+        else
+        {
+            throw new ArgumentException("There is no such facility with this alcohol!");
+        }
+    }
+
+    public void EditFacilityWithAlcohol(Facility facility1, Facility facility2, int Quantity)
+    {
+        RemoveFacilityWithAlcohol(facility1);
+        AddFacilityWithAlcohol(facility2, Quantity);
+    }
+    
+    public void AddClientWithAlcoholInCart(Client client, int Quantity)
+    {
+        if (client == null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        _clientsWithThisAlcoholInCart.Add(client);
+        
+        if (client.AlcoholInCart.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key == -1)
+        {
+            client.AddAlcoholToCart(this, Quantity);
+        }
+    }
+
+    public void RemoveClientWithAlcoholInCart(Client client)
+    {
+        if (client == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (ClientsWithThisAlcoholInCart.Contains(client))
+        {
+            _clientsWithThisAlcoholInCart.Remove(client);
+            
+            if (client.AlcoholInCart.FirstOrDefault(alc => alc.Value == this, new KeyValuePair<int, Alcohol>(-1, new Alcohol())).Key != -1)
+            {
+                client.RemoveAlcoholFromCart(this);
+            }
+        }
+        else
+        {
+            throw new ArgumentException("There is no such cocktail for this alcohol!");
+        }
+    }
+
+    public void EditClientWithAlcoholInCart(Client client1, Client client2, int Quantity)
+    {
+        RemoveClientWithAlcoholInCart(client1);
+        AddClientWithAlcoholInCart(client2, Quantity);
+    }
+    
     private static void AddToExtent(Alcohol alcohol)
     {
         if (alcohol == null)
