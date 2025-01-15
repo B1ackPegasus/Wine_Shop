@@ -34,6 +34,24 @@ public class PartnerAccount : Client
         Email = email;
         Phone = phone;
         CompanyName = companyName;
+        TypeOfClient = ClientType.NonPremium;
+        
+        AddToExtent(this);
+    }
+    
+    public PartnerAccount(int id, string email, string phone, string companyName, MyDate startDate, MyDate endDate, List<string> benefits)
+    {
+        Id = id;
+        Email = email;
+        Phone = phone;
+        CompanyName = companyName;
+
+        StartDate = startDate;
+        EndDate = endDate;
+        Benefits = benefits;
+        TypeOfClient = ClientType.Premium;
+        
+        
         AddToExtent(this);
     }
 

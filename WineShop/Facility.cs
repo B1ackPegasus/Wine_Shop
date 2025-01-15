@@ -1,6 +1,9 @@
 namespace WineShop;
+using System.Xml;
+using System.Xml.Serialization;
 
-public abstract class Facility
+
+public class Facility
 {
     private int _id;
 
@@ -29,6 +32,15 @@ public abstract class Facility
         }
     }
     
+    private static List<Facility> _facilityExtent = [];
+
+    public static List<Facility> StoreExtent
+    {
+        get => new List<Facility>(_facilityExtent);
+    }
+    
+    
+    
     private List<Employee> _employeesWorkInThisFacility = [];
 
     public List<Employee> EmployeesWorkInThisFacility
@@ -51,7 +63,132 @@ public abstract class Facility
     }
     
     public int Alcohol_Id = 0;
+    
+    
+    private FacilityType _typeOfFacility;
 
+    public FacilityType TypeOfFacility
+    {
+        get => _typeOfFacility;
+    }
+    
+    
+    
+    //Store
+    private Time _openingTime;
+
+    public Time OpeningTime
+    {
+        get{
+            if (TypeOfFacility == FacilityType.Warehouse)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return _openingTime;
+        }
+        set
+        {
+            if (TypeOfFacility == FacilityType.Warehouse)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            _openingTime = value;
+        }
+    }
+
+    private Time _closingTime;
+
+    public Time ClosingTime
+    {
+        get{
+            if (TypeOfFacility == FacilityType.Warehouse)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return _closingTime;
+        }
+        set
+        {
+            if (TypeOfFacility == FacilityType.Warehouse)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            _closingTime = value;
+        }
+    }
+    
+    
+    
+    //Warehouse
+    private int _storageLeft;
+
+    public int StorageLeft
+    {
+        get{
+            if (TypeOfFacility == FacilityType.Store)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return _storageLeft;
+        }
+        set
+        {
+            if (TypeOfFacility == FacilityType.Store)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            if (value < 0)
+            {
+                throw new ArgumentException("Invalid storage number.");
+            }
+
+            _storageLeft = value;
+        }
+    }
+    
+    public Facility(int id,Address address, Time openingTime, Time closingTime)
+    {
+        OpeningTime = openingTime; 
+        ClosingTime = closingTime; 
+        Id = id; 
+        Address = address;
+        _typeOfFacility = FacilityType.Store;
+        
+        AddToExtent(this);
+    }
+    
+    public Facility(int storageLeft, int id, Address address)
+    {
+        StorageLeft = storageLeft;
+        Id = id;
+        Address = address;
+        _typeOfFacility = FacilityType.Warehouse;
+        
+        AddToExtent(this);
+    }
+    
+    public Facility(int id,Address address, Time openingTime, Time closingTime,int storageLeft)
+    {
+        OpeningTime = openingTime; 
+        ClosingTime = closingTime; 
+        Id = id; 
+        Address = address;
+        StorageLeft = storageLeft;
+        _typeOfFacility = FacilityType.WarehouseStore;
+        
+        AddToExtent(this);
+    }
+
+    public Facility()
+    {
+    }
+    
     public void AddEmployeeToFacility(Employee employee)
     {
         if (employee == null)
@@ -90,8 +227,7 @@ public abstract class Facility
             throw new ArgumentException("No such employee at this facility!");
         }
     }
-
-    public abstract void DeleteFacility();
+    
     
     public void AddAlcoholToFacility( Alcohol alcohol, int Quantity)
     {
@@ -140,6 +276,74 @@ public abstract class Facility
     {
         RemoveAlcoholFromFacility(alcohol1);
         AddAlcoholToFacility(alcohol2, Quantity);
+    }
+    
+    public void DeleteFacility()
+    {
+        _facilityExtent.Remove(this);
+        
+        for (int i = 0; i < EmployeesWorkInThisFacility.Count; i++)
+        {
+            EmployeesWorkInThisFacility[i].DeleteEmployee();
+        }
+    }
+    
+    private static void AddToExtent(Facility facility)
+    {
+        if (facility == null)
+        {
+            throw new ArgumentException("Cannot be null!");
+        }
+        _facilityExtent.Add(facility);
+    }
+    
+    private static void DeleteFromExtent(int id)
+    {
+        _facilityExtent.RemoveAt(id);
+    }
+    
+    public static void save(string path = "faclity.xml")
+    {
+        StreamWriter file = File.CreateText(path);
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Facility>));
+        using (XmlTextWriter writer = new XmlTextWriter(file))
+        {
+            xmlSerializer.Serialize(writer, StoreExtent);
+        }
+    }
+
+    public static bool load(string path = "faclity.xml")
+    {
+        StreamReader file;
+        try
+        {
+            file = File.OpenText(path);
+        }
+        catch(FileNotFoundException)
+        {
+            _facilityExtent.Clear();
+            return false;
+        }
+
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Facility>));
+        using (XmlTextReader reader = new XmlTextReader(file))
+        {
+            try
+            {
+                _facilityExtent = (List<Facility>)xmlSerializer.Deserialize(reader);
+            }
+            catch (InvalidCastException)
+            {
+                _facilityExtent.Clear();
+                return false;
+            }
+            catch (Exception)
+            {
+                _facilityExtent.Clear();
+                return false;
+            }
+        }
+        return true;
     }
 }
 

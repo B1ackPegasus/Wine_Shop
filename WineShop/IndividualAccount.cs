@@ -85,6 +85,25 @@ public class IndividualAccount : Client
         Surname = surname;
         Username = username;
         Age = age;
+        TypeOfClient = ClientType.NonPremium;
+        
+        AddToExtent(this);
+    }
+    
+    public IndividualAccount(int id, string email, string phone, string name, string surname, string username, int age, MyDate startDate, MyDate endDate, List<string> benefits)
+    {
+        Id = id;
+        Email = email;
+        Phone = phone;
+        Name = name;
+        Surname = surname;
+        Username = username;
+        Age = age;
+        
+        StartDate = startDate;
+        EndDate = endDate;
+        Benefits = benefits;
+        TypeOfClient = ClientType.Premium;
         
         AddToExtent(this);
     }

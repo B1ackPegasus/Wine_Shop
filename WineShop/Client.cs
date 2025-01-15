@@ -49,6 +49,108 @@ public abstract class Client
         }
     }
     
+    
+    private ClientType _typeOfClient;
+    public ClientType TypeOfClient
+    {
+        get => _typeOfClient;
+        set 
+        {
+            _typeOfClient = value;
+        }
+        
+    }
+    
+    //Premium
+    private MyDate _startDate;
+
+    public MyDate StartDate
+    {
+        get{
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return _startDate;
+        }
+        set
+        {
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            _startDate = value;
+        }
+    }
+    
+    private MyDate _endDate;
+
+    public MyDate EndDate
+    {
+        get{
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return _endDate;
+        }
+        set
+        {
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            if (StartDate.CompareTo(value))
+
+            {
+                throw new ArgumentException("Invalid end date.");
+            }
+
+            _endDate = value;
+        }
+    }
+
+    
+    private List<string> _benefits = [];
+
+    public List<string> Benefits
+    {
+        get{
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+
+            return new List<string>(_benefits);
+        }
+        set
+        {
+            if (TypeOfClient == ClientType.NonPremium)
+            {
+                throw new Exception("You cannot access this variable!");
+            }
+            
+            if (value.Count < 1)
+            {
+                throw new ArgumentException("Invalid benefits list.");
+            }
+
+            if (value.Contains(""))
+            {
+                throw new ArgumentException("Empty strings are not allowed.");
+            }
+
+            _benefits = value;
+        }
+    }
+    
+    
+    
+    
     private List<KeyValuePair<int, Alcohol>> _alcoholInCart = new List<KeyValuePair<int, Alcohol>>();
 
     public List<KeyValuePair<int, Alcohol>> AlcoholInCart

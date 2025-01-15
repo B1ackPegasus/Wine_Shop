@@ -1,4 +1,4 @@
-using System.Xml;
+/*using System.Xml;
 using System.Xml.Serialization;
 
 namespace WineShop;
@@ -107,7 +107,7 @@ public class Store:Facility
         return true;
     }
     
-    public override void DeleteFacility()
+    public void DeleteFacility()
     {
         _storeExtent.Remove(this);
         
@@ -116,4 +116,4 @@ public class Store:Facility
             EmployeesWorkInThisFacility[i].DeleteEmployee();
         }
     }
-}
+}*/
